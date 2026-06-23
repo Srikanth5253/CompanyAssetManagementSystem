@@ -33,6 +33,7 @@ import {
     FiPackage,
     FiTrendingUp,
     FiClock,
+    FiDownload,
 } from "react-icons/fi";
 
 import { saveAs } from "file-saver";
@@ -222,15 +223,19 @@ const Reports = () => {
                 <button
                     onClick={exportCSV}
                     className="
-      bg-emerald-600
-      hover:bg-emerald-700
-      text-white
-      px-4
-      py-2
-      rounded-xl
-      font-medium
-    "
+    bg-emerald-600
+    hover:bg-emerald-700
+    text-white
+    px-4
+    py-2
+    rounded-xl
+    font-medium
+    flex
+    items-center
+    gap-2
+  "
                 >
+                    <FiDownload className="text-lg" />
                     Export CSV
                 </button>
             </div>
