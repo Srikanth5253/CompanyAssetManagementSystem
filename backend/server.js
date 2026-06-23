@@ -64,14 +64,11 @@ app.use(
   maintenanceRequestRoutes
 );
 
-app.use(notFound);
-app.use(errorHandler);
-
-
 app.get("/api/health", (req, res) => {
   res.json({ status: "Server Running" });
 });
 
+app.use(notFound);
 app.use(errorHandler);
 
 const startServer = async () => {
