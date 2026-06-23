@@ -1,6 +1,4 @@
-import {
-  useEffect,
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   useDispatch,
@@ -17,10 +15,31 @@ const AssetHistory = () => {
   const dispatch =
     useDispatch();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const historyPerPage = 5;
+
   const { history } =
     useSelector(
       (state) =>
         state.history
+    );
+
+  const lastIndex =
+    currentPage * historyPerPage;
+
+  const firstIndex =
+    lastIndex - historyPerPage;
+
+  const currentHistory =
+    history?.slice(
+      firstIndex,
+      lastIndex
+    ) || [];
+
+  const totalPages =
+    Math.ceil(
+      (history?.length || 0) /
+      historyPerPage
     );
 
   useEffect(() => {
@@ -67,7 +86,7 @@ const AssetHistory = () => {
 
           <tbody>
 
-            {history?.map(
+            {currentHistory.map(
               (item) => (
                 <tr
                   key={
@@ -107,9 +126,9 @@ const AssetHistory = () => {
 
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${item.action ===
-                          "Assigned"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
+                        "Assigned"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
                         }`}
                     >
                       {
@@ -132,6 +151,61 @@ const AssetHistory = () => {
           </tbody>
 
         </table>
+        <div className="flex items-center justify-between p-4 border-t border-slate-200">
+
+          <p className="text-sm text-slate-500">
+            Showing {history?.length ? firstIndex + 1 : 0} -
+            {Math.min(
+              lastIndex,
+              history?.length || 0
+            )} of {history?.length || 0}
+          </p>
+
+          <div className="flex gap-2">
+
+            <button
+              disabled={currentPage === 1}
+              onClick={() =>
+                setCurrentPage(
+                  currentPage - 1
+                )
+              }
+              className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        border-slate-300
+        disabled:opacity-50
+      "
+            >
+              Previous
+            </button>
+
+            <button
+              disabled={
+                currentPage === totalPages
+              }
+              onClick={() =>
+                setCurrentPage(
+                  currentPage + 1
+                )
+              }
+              className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        border-slate-300
+        disabled:opacity-50
+      "
+            >
+              Next
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
 

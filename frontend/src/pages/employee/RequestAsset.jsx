@@ -28,6 +28,31 @@ const RequestAsset = () => {
         (state) => state.requests
     );
 
+    const [currentPage, setCurrentPage] =
+        useState(1);
+
+    const requestsPerPage = 5;
+
+    const lastIndex =
+        currentPage *
+        requestsPerPage;
+
+    const firstIndex =
+        lastIndex -
+        requestsPerPage;
+
+    const currentRequests =
+        requests?.slice(
+            firstIndex,
+            lastIndex
+        ) || [];
+
+    const totalPages =
+        Math.ceil(
+            (requests?.length || 0) /
+            requestsPerPage
+        );
+
     const [formData, setFormData] =
         useState({
             assetType: "",
@@ -283,7 +308,7 @@ const RequestAsset = () => {
 
                             <tbody>
 
-                                {requests?.map(
+                                {currentRequests.map(
                                     (request) => (
                                         <tr
                                             key={request._id}
@@ -357,6 +382,62 @@ const RequestAsset = () => {
                         </table>
 
                     )}
+
+                    <div className="flex items-center justify-between p-4 border-t border-slate-200">
+
+                        <p className="text-sm text-slate-500">
+                            Showing {requests?.length ? firstIndex + 1 : 0} -
+                            {Math.min(
+                                lastIndex,
+                                requests?.length || 0
+                            )} of {requests?.length || 0}
+                        </p>
+
+                        <div className="flex gap-2">
+
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() =>
+                                    setCurrentPage(
+                                        currentPage - 1
+                                    )
+                                }
+                                className="
+                px-4
+                py-2
+                rounded-lg
+                border
+                border-slate-300
+                disabled:opacity-50
+            "
+                            >
+                                Previous
+                            </button>
+
+                            <button
+                                disabled={
+                                    currentPage === totalPages
+                                }
+                                onClick={() =>
+                                    setCurrentPage(
+                                        currentPage + 1
+                                    )
+                                }
+                                className="
+                px-4
+                py-2
+                rounded-lg
+                border
+                border-slate-300
+                disabled:opacity-50
+            "
+                            >
+                                Next
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
             </div>

@@ -1,8 +1,7 @@
 import {
   useEffect,
+  useState,
 } from "react";
-
-import { useState } from "react";
 
 import {
   useDispatch,
@@ -35,6 +34,10 @@ const MyAssets = () => {
   const dispatch =
     useDispatch();
 
+  const [currentPage, setCurrentPage] =
+    useState(1);
+  const assetsPerPage = 5;
+
   const [
     selectedAsset,
     setSelectedAsset,
@@ -51,6 +54,26 @@ const MyAssets = () => {
   } = useSelector(
     (state) => state.assets
   );
+
+  const lastIndex =
+    currentPage *
+    assetsPerPage;
+
+  const firstIndex =
+    lastIndex -
+    assetsPerPage;
+
+  const currentAssets =
+    assets?.slice(
+      firstIndex,
+      lastIndex
+    ) || [];
+
+  const totalPages =
+    Math.ceil(
+      (assets?.length || 0) /
+      assetsPerPage
+    );
 
   useEffect(() => {
     dispatch(fetchMyAssets());
@@ -197,7 +220,7 @@ const MyAssets = () => {
             </thead>
 
             <tbody>
-              {assets.map(
+              {currentAssets.map(
                 (asset) => (
                   <tr
                     key={asset._id}
@@ -307,6 +330,63 @@ const MyAssets = () => {
               )}
             </tbody>
           </table>
+
+          <div className="flex items-center justify-between p-4 border-t border-slate-200">
+
+            <p className="text-sm text-slate-500">
+              Showing {assets?.length ? firstIndex + 1 : 0} -
+              {Math.min(
+                lastIndex,
+                assets?.length || 0
+              )} of {assets?.length || 0}
+            </p>
+
+            <div className="flex gap-2">
+
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage - 1
+                  )
+                }
+                className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        border-slate-300
+        disabled:opacity-50
+      "
+              >
+                Previous
+              </button>
+
+              <button
+                disabled={
+                  currentPage === totalPages
+                }
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage + 1
+                  )
+                }
+                className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        border-slate-300
+        disabled:opacity-50
+      "
+              >
+                Next
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
       )}
 

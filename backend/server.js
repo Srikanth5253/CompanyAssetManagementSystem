@@ -13,13 +13,7 @@ import historyRoutes from "./routes/historyRoutes.js";
 import returnRequestRoutes from "./routes/returnRequestRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import maintenanceRequestRoutes from "./routes/maintenanceRequestRoutes.js";
-
-
-
-import {
-  notFound,
-  errorHandler,
-} from "./middleware/errorMiddleware.js";
+import {notFound, errorHandler} from "./middleware/errorMiddleware.js";
 
 const app = express();
 
@@ -39,26 +33,32 @@ app.use(
   "/api/employees",
   employeeRoutes
 );
+
 app.use(
   "/api/assets",
   assetRoutes
 );
+
 app.use(
   "/api/requests",
   requestRoutes
 );
+
 app.use(
   "/api/history",
   historyRoutes
 );
+
 app.use(
   "/api/return-requests",
   returnRequestRoutes
 );
+
 app.use(
   "/api/dashboard",
   dashboardRoutes
 );
+
 app.use(
   "/api/maintenance-requests",
   maintenanceRequestRoutes
