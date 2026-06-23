@@ -28,6 +28,15 @@ import {
     LabelList,
 } from "recharts";
 
+import {
+    FiCheckCircle,
+    FiPackage,
+    FiTrendingUp,
+    FiClock,
+} from "react-icons/fi";
+
+import { saveAs } from "file-saver";
+
 const Reports = () => {
 
     const dispatch =
@@ -60,21 +69,27 @@ const Reports = () => {
     const assetStatusData = [
         {
             name: "Available",
-            value:
-                adminDashboard
-                    ?.availableAssets || 0,
+            value: adminDashboard?.availableAssets || 0,
         },
         {
             name: "Assigned",
-            value:
-                adminDashboard
-                    ?.assignedAssets || 0,
+            value: adminDashboard?.assignedAssets || 0,
+        },
+        {
+            name: "Maintenance",
+            value: adminDashboard?.maintenanceAssets || 0,
+        },
+        {
+            name: "Retired",
+            value: adminDashboard?.retiredAssets || 0,
         },
     ];
 
     const COLORS = [
         "#10B981",
         "#8B5CF6",
+        "#F59E0B",
+        "#EF4444",
     ];
 
     const categoryData =
@@ -96,6 +111,98 @@ const Reports = () => {
             })
         ) || [];
 
+    const REQUEST_COLORS = {
+        approved: "#10B981",
+        pending: "#F59E0B",
+        rejected: "#EF4444",
+    };
+
+    const totalAssets =
+        adminDashboard?.totalAssets || 0;
+
+    const availableAssets =
+        adminDashboard?.availableAssets || 0;
+
+    const availablePercentage =
+        totalAssets > 0
+            ? Math.round(
+                (availableAssets / totalAssets) * 100
+            )
+            : 0;
+
+    const topCategory =
+        categoryData.length > 0
+            ? categoryData[0]
+            : null;
+
+    const approvedRequests =
+        requestData.find(
+            (item) =>
+                item.status?.toLowerCase() === "approved"
+        )?.count || 0;
+
+    const pendingRequests =
+        requestData.find(
+            (item) =>
+                item.status?.toLowerCase() === "pending"
+        )?.count || 0;
+
+    const exportCSV = () => {
+
+        const rows = [
+            ["Metric", "Value"],
+
+            [
+                "Available Assets",
+                adminDashboard?.availableAssets || 0,
+            ],
+
+            [
+                "Assigned Assets",
+                adminDashboard?.assignedAssets || 0,
+            ],
+
+            [
+                "Maintenance Assets",
+                adminDashboard?.maintenanceAssets || 0,
+            ],
+
+            [
+                "Retired Assets",
+                adminDashboard?.retiredAssets || 0,
+            ],
+
+            [
+                "Employees",
+                adminDashboard?.employees || 0,
+            ],
+
+            [
+                "Pending Requests",
+                adminDashboard?.pendingRequests || 0,
+            ],
+        ];
+
+        const csvContent =
+            rows
+                .map((row) =>
+                    row.join(",")
+                )
+                .join("\n");
+
+        const blob = new Blob(
+            [csvContent],
+            {
+                type: "text/csv;charset=utf-8;",
+            }
+        );
+
+        saveAs(
+            blob,
+            "asset-report.csv"
+        );
+    };
+
     if (isLoading) {
         return (
             <div className="text-center py-10">
@@ -106,11 +213,27 @@ const Reports = () => {
 
     return (
         <div className="space-y-8">
+            <div className="flex justify-between items-center">
+                <PageHeader
+                    title="Reports & Analytics"
+                    description="Asset utilization and inventory insights"
+                />
 
-            <PageHeader
-                title="Reports & Analytics"
-                description="Asset utilization and inventory insights"
-            />
+                <button
+                    onClick={exportCSV}
+                    className="
+      bg-emerald-600
+      hover:bg-emerald-700
+      text-white
+      px-4
+      py-2
+      rounded-xl
+      font-medium
+    "
+                >
+                    Export CSV
+                </button>
+            </div>
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white">
                 <h2 className="text-2xl font-bold">
                     Asset Insights
@@ -119,6 +242,142 @@ const Reports = () => {
                 <p className="mt-2 text-blue-100">
                     Monitor asset distribution, utilization and request trends.
                 </p>
+            </div>
+
+            <div className="
+  bg-white
+  rounded-2xl
+  border
+  border-slate-200
+  shadow-sm
+  p-6
+">
+                <h2 className="text-xl font-bold mb-5">
+                    Key Insights
+                </h2>
+
+                <div className="
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    gap-4
+  ">
+
+                    <div className="
+      flex items-center gap-3
+      bg-green-50
+      border border-green-200
+      rounded-xl
+      p-4
+    ">
+                        <div className="
+        p-3
+        rounded-xl
+        bg-green-100
+      ">
+                            <FiPackage
+                                className="
+            text-green-600
+            text-xl
+          "
+                            />
+                        </div>
+
+                        <p className="
+        text-green-800
+        font-medium
+      ">
+                            {availablePercentage}% assets are currently available
+                        </p>
+                    </div>
+
+                    <div className="
+      flex items-center gap-3
+      bg-blue-50
+      border border-blue-200
+      rounded-xl
+      p-4
+    ">
+                        <div className="
+        p-3
+        rounded-xl
+        bg-blue-100
+      ">
+                            <FiTrendingUp
+                                className="
+            text-blue-600
+            text-xl
+          "
+                            />
+                        </div>
+
+                        <p className="
+        text-blue-800
+        font-medium
+      ">
+                            {topCategory
+                                ? `${topCategory.category} is the most common category (${topCategory.count} assets)`
+                                : "No category data available"}
+                        </p>
+                    </div>
+
+                    <div className="
+      flex items-center gap-3
+      bg-emerald-50
+      border border-emerald-200
+      rounded-xl
+      p-4
+    ">
+                        <div className="
+        p-3
+        rounded-xl
+        bg-emerald-100
+      ">
+                            <FiCheckCircle
+                                className="
+            text-emerald-600
+            text-xl
+          "
+                            />
+                        </div>
+
+                        <p className="
+        text-emerald-800
+        font-medium
+      ">
+                            {approvedRequests} requests approved
+                        </p>
+                    </div>
+
+                    <div className="
+      flex items-center gap-3
+      bg-amber-50
+      border border-amber-200
+      rounded-xl
+      p-4
+    ">
+                        <div className="
+        p-3
+        rounded-xl
+        bg-amber-100
+      ">
+                            <FiClock
+                                className="
+            text-amber-600
+            text-xl
+          "
+                            />
+                        </div>
+
+                        <p className="
+        text-amber-800
+        font-medium
+      ">
+                            {pendingRequests} requests pending review
+                        </p>
+                    </div>
+
+                </div>
             </div>
 
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
@@ -140,6 +399,7 @@ const Reports = () => {
                                 data={assetStatusData}
                                 dataKey="value"
                                 nameKey="name"
+                                innerRadius={70}
                                 outerRadius={100}
                                 label
                             >
@@ -289,9 +549,19 @@ const Reports = () => {
 
                                 <Bar
                                     dataKey="count"
-                                    fill="#F59E0B"
                                     radius={[8, 8, 0, 0]}
                                 >
+                                    {requestData.map((entry, index) => (
+                                        <Cell
+                                            key={index}
+                                            fill={
+                                                REQUEST_COLORS[
+                                                entry.status?.toLowerCase()
+                                                ] || "#64748B"
+                                            }
+                                        />
+                                    ))}
+
                                     <LabelList
                                         dataKey="count"
                                         position="top"
