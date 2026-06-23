@@ -62,7 +62,6 @@ export const getDashboardStats =
         });
     });
 
-
 export const getEmployeeDashboard =
     asyncHandler(async (req, res) => {
 
