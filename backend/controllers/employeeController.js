@@ -29,17 +29,46 @@ export const createEmployee =
                 );
             }
 
-            const existingUser =
+            const existingEmail =
                 await User.findOne({
                     email,
                 });
 
-            if (existingUser) {
+            if (existingEmail) {
                 res.status(400);
-
                 throw new Error(
-                    "Employee already exists"
+                    "Email already exists"
                 );
+            }
+
+            if (phone) {
+                const existingPhone =
+                    await User.findOne({
+                        phone,
+                    });
+
+                if (existingPhone) {
+                    res.status(400);
+                    throw new Error(
+                        "Phone number already exists"
+                    );
+                }
+            }
+
+            if (employeeId) {
+                const existingEmployeeId =
+                    await User.findOne({
+                        employeeId,
+                    });
+
+                if (
+                    existingEmployeeId
+                ) {
+                    res.status(400);
+                    throw new Error(
+                        "Employee ID already exists"
+                    );
+                }
             }
 
             const hashedPassword =
@@ -121,6 +150,24 @@ export const updateEmployee =
             employee.designation =
                 req.body.designation ??
                 employee.designation;
+
+            if (req.body.phone) {
+                const existingPhone =
+                    await User.findOne({
+                        phone:
+                            req.body.phone,
+                        _id: {
+                            $ne: employee._id,
+                        },
+                    });
+
+                if (existingPhone) {
+                    res.status(400);
+                    throw new Error(
+                        "Phone number already exists"
+                    );
+                }
+            }
 
             employee.phone =
                 req.body.phone ??

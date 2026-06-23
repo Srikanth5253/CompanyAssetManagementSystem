@@ -120,48 +120,48 @@ export const login =
     );
 
 
-    export const changePassword =
-  asyncHandler(
-    async (req, res) => {
-      const {
-        currentPassword,
-        newPassword,
-      } = req.body;
+export const changePassword =
+    asyncHandler(
+        async (req, res) => {
+            const {
+                currentPassword,
+                newPassword,
+            } = req.body;
 
-      const user =
-        await User.findById(
-          req.user._id
-        );
+            const user =
+                await User.findById(
+                    req.user._id
+                );
 
-      const isMatch =
-        await bcrypt.compare(
-          currentPassword,
-          user.password
-        );
+            const isMatch =
+                await bcrypt.compare(
+                    currentPassword,
+                    user.password
+                );
 
-      if (!isMatch) {
-        res.status(400);
+            if (!isMatch) {
+                res.status(400);
 
-        throw new Error(
-          "Current password is incorrect"
-        );
-      }
+                throw new Error(
+                    "Current password is incorrect"
+                );
+            }
 
-      const salt =
-        await bcrypt.genSalt(10);
+            const salt =
+                await bcrypt.genSalt(10);
 
-      user.password =
-        await bcrypt.hash(
-          newPassword,
-          salt
-        );
+            user.password =
+                await bcrypt.hash(
+                    newPassword,
+                    salt
+                );
 
-      await user.save();
+            await user.save();
 
-      res.status(200).json({
-        success: true,
-        message:
-          "Password updated successfully",
-      });
-    }
-  );
+            res.status(200).json({
+                success: true,
+                message:
+                    "Password updated successfully",
+            });
+        }
+    );

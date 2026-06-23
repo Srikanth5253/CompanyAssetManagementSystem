@@ -43,29 +43,67 @@ const EditEmployee = ({
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    await dispatch(
-      updateEmployee({
-        id: selectedEmployee._id,
-        employeeData: formData,
-      })
-    ).unwrap();
+    if (!formData.name.trim()) {
+      return toast.error(
+        "Name is required"
+      );
+    }
 
-    toast.success(
-      "Employee updated successfully"
-    );
+    if (
+      !formData.department.trim()
+    ) {
+      return toast.error(
+        "Department is required"
+      );
+    }
 
-    dispatch(fetchEmployees());
+    if (
+      !formData.designation.trim()
+    ) {
+      return toast.error(
+        "Designation is required"
+      );
+    }
 
-    onClose();
-  } catch (error) {
-    toast.error(
-      error || "Failed to update employee"
-    );
-  }
-};
+    if (!formData.phone.trim()) {
+      return toast.error(
+        "Phone number is required"
+      );
+    }
+
+    if (
+      !/^[6-9]\d{9}$/.test(
+        formData.phone
+      )
+    ) {
+      return toast.error(
+        "Enter a valid 10-digit phone number"
+      );
+    }
+
+    try {
+      await dispatch(
+        updateEmployee({
+          id: selectedEmployee._id,
+          employeeData: formData,
+        })
+      ).unwrap();
+
+      toast.success(
+        "Employee updated successfully"
+      );
+
+      dispatch(fetchEmployees());
+
+      onClose();
+    } catch (error) {
+      toast.error(
+        error || "Failed to update employee"
+      );
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">

@@ -50,7 +50,13 @@ const userSchema =
 
       phone: {
         type: String,
+        required: [true, "Phone number is required"],
+        unique: true,
         trim: true,
+        match: [
+          /^[6-9]\d{9}$/,
+          "Phone number must be a valid 10-digit Indian mobile number",
+        ],
       },
 
       status: {

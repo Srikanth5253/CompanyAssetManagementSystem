@@ -20,7 +20,7 @@ import {
 } from "../../redux/slices/employeeSlice";
 
 const AddEmployee = () => {
-  
+
   const dispatch =
     useDispatch();
 
@@ -53,6 +53,81 @@ const AddEmployee = () => {
   const handleSubmit =
     async (e) => {
       e.preventDefault();
+
+      if (!formData.name.trim()) {
+        return toast.error("Name is required");
+      }
+
+      if (!formData.email.trim()) {
+        return toast.error("Email is required");
+      }
+
+      const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (
+        !emailRegex.test(
+          formData.email
+        )
+      ) {
+        return toast.error(
+          "Please enter a valid email address"
+        );
+      }
+
+      if (!formData.password.trim()) {
+        return toast.error(
+          "Password is required"
+        );
+      }
+
+      if (
+        formData.password.length < 6
+      ) {
+        return toast.error(
+          "Password must be at least 6 characters"
+        );
+      }
+
+      if (
+        !formData.employeeId.trim()
+      ) {
+        return toast.error(
+          "Employee ID is required"
+        );
+      }
+
+      if (
+        !formData.department.trim()
+      ) {
+        return toast.error(
+          "Department is required"
+        );
+      }
+
+      if (
+        !formData.designation.trim()
+      ) {
+        return toast.error(
+          "Designation is required"
+        );
+      }
+
+      if (!formData.phone.trim()) {
+        return toast.error(
+          "Phone number is required"
+        );
+      }
+
+      if (
+        !/^[6-9]\d{9}$/.test(
+          formData.phone
+        )
+      ) {
+        return toast.error(
+          "Enter a valid 10-digit phone number"
+        );
+      }
 
       try {
         await dispatch(
@@ -225,7 +300,7 @@ const AddEmployee = () => {
 
             <button
               type="button"
-              onClick={() =>navigate("/dashboard/employees")}
+              onClick={() => navigate("/dashboard/employees")}
               className="
                 px-5
                 py-3

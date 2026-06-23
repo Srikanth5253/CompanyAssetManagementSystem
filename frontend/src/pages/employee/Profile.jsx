@@ -76,12 +76,16 @@ const Profile = () => {
         return;
       }
 
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
       if (
-        formData.newPassword
-          .length < 6
+        !passwordRegex.test(
+          formData.newPassword
+        )
       ) {
         toast.error(
-          "Password must be at least 6 characters"
+          "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number"
         );
 
         return;
@@ -459,8 +463,9 @@ p-8
             </div>
 
             <p className="text-sm text-slate-500 mt-1">
-              Password must contain
-              at least 6 characters.
+              Password must contain at least 8 characters,
+              one uppercase letter, one lowercase letter
+              and one number.
             </p>
 
             {formData.newPassword
