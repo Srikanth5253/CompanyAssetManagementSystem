@@ -1,346 +1,3 @@
-// import { useEffect } from "react";
-
-// import { useNavigate } from "react-router-dom";
-
-// import {
-//   useDispatch,
-//   useSelector,
-// } from "react-redux";
-
-// import {
-//   fetchDashboardStats,
-// } from "../../redux/slices/dashboardSlice";
-
-// import PageHeader from "../../components/layout/PageHeader";
-
-// import {
-//   FiPackage,
-//   FiCheckCircle,
-//   FiBox,
-//   FiUsers,
-//   FiFileText,
-//   FiRotateCcw,
-//   FiPlus,
-//   FiUserPlus,
-// } from "react-icons/fi";
-
-// const Dashboard = () => {
-
-//   const dispatch =
-//     useDispatch();
-
-//   const navigate =
-//     useNavigate();
-
-//   const {
-//     adminDashboard,
-//     isLoading,
-//   } = useSelector(
-//     (state) =>
-//       state.dashboard
-//   );
-
-//   useEffect(() => {
-//     dispatch(
-//       fetchDashboardStats()
-//     );
-//   }, [dispatch]);
-
-//   const cards = [
-//     {
-//       title: "Total Assets",
-//       value:
-//         adminDashboard
-//           ?.totalAssets || 0,
-//       icon: FiPackage,
-//       bg: "bg-blue-100",
-//       text: "text-blue-600",
-//     },
-
-//     {
-//       title:
-//         "Available Assets",
-
-//       value:
-//         adminDashboard
-//           ?.availableAssets || 0,
-
-//       icon:
-//         FiCheckCircle,
-
-//       bg:
-//         "bg-green-100",
-
-//       text:
-//         "text-green-600",
-//     },
-
-//     {
-//       title:
-//         "Assigned Assets",
-
-//       value:
-//         adminDashboard
-//           ?.assignedAssets || 0,
-
-//       icon: FiBox,
-
-//       bg:
-//         "bg-purple-100",
-
-//       text:
-//         "text-purple-600",
-//     },
-
-//     {
-//       title:
-//         "Employees",
-
-//       value:
-//         adminDashboard
-//           ?.employees || 0,
-
-//       icon:
-//         FiUsers,
-
-//       bg:
-//         "bg-orange-100",
-
-//       text:
-//         "text-orange-600",
-//     },
-
-//     {
-//       title:
-//         "Pending Requests",
-
-//       value:
-//         adminDashboard
-//           ?.pendingRequests || 0,
-
-//       icon:
-//         FiFileText,
-
-//       bg:
-//         "bg-yellow-100",
-
-//       text:
-//         "text-yellow-600",
-//     },
-
-//     {
-//       title:
-//         "Pending Returns",
-
-//       value:
-//         adminDashboard
-//           ?.pendingReturnRequests || 0,
-
-//       icon:
-//         FiRotateCcw,
-
-//       bg:
-//         "bg-red-100",
-
-//       text:
-//         "text-red-600",
-//     },
-//   ];
-
-//   if (isLoading) {
-//     return (
-//       <div className="text-center py-10">
-//         Loading...
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="space-y-8">
-//       <PageHeader
-//         title="Dashboard"
-//         description="Overview of assets, employees, requests and returns"
-//       />
-//       <div className="
-//   grid
-//   grid-cols-1
-//   md:grid-cols-2
-//   xl:grid-cols-3
-//   gap-6
-// ">
-
-//         {cards.map(
-//           (card) => {
-
-//             const Icon =
-//               card.icon;
-
-//             return (
-
-//               <div
-//                 key={card.title}
-//                 className="
-//             bg-white
-//             rounded-2xl
-//             p-6
-//             shadow-sm
-//             border
-//             hover:shadow-lg hover:-translate-y-1 transition-all duration-300
-//           "
-//               >
-
-//                 <div className="
-//             flex
-//             justify-between
-//             items-center
-//           ">
-
-//                   <div>
-
-//                     <p className="
-//                 text-sm
-//                 text-gray-500
-//               ">
-//                       {card.title}
-//                     </p>
-
-//                     <h2 className="
-//                 text-4xl font-bold tracking-tight mt-2
-//               ">
-//                       {card.value}
-//                     </h2>
-
-//                   </div>
-
-//                   <div
-//                     className={`
-//                 ${card.bg}
-//                 p-4
-//                 rounded-2xl
-//               `}
-//                   >
-
-//                     <Icon
-//                       className={`
-//                   ${card.text}
-//                   text-3xl
-//                 `}
-//                     />
-
-//                   </div>
-
-//                 </div>
-
-//               </div>
-//             );
-//           }
-//         )}
-
-//       </div>
-
-//       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-
-//         <h2 className="text-xl font-semibold text-slate-800 mb-4">
-//           Quick Actions
-//         </h2>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-
-//           <button
-//             onClick={() =>
-//               navigate("/dashboard/assets")
-//             }
-//             className="
-//         bg-blue-600
-//         hover:bg-blue-700
-//         text-white
-//         p-5
-//         rounded-2xl
-//         flex
-//         items-center
-//         gap-3
-//         font-semibold
-//       "
-//           >
-//             <FiPlus size={22} />
-//             Add Asset
-//           </button>
-
-//           <button
-//             onClick={() =>
-//               navigate("/dashboard/employees")
-//             }
-//             className="
-//         bg-green-600
-//         hover:bg-green-700
-//         text-white
-//         p-5
-//         rounded-2xl
-//         flex
-//         items-center
-//         gap-3
-//         font-semibold
-//       "
-//           >
-//             <FiUserPlus size={22} />
-//             Add Employee
-//           </button>
-
-//           <button
-//             onClick={() =>
-//               navigate("/dashboard/requests")
-//             }
-//             className="
-//         bg-yellow-500
-//         hover:bg-yellow-600
-//         text-white
-//         p-5
-//         rounded-2xl
-//         flex
-//         items-center
-//         gap-3
-//         font-semibold
-//       "
-//           >
-//             <FiFileText size={22} />
-//             View Requests
-//           </button>
-
-//           <button
-//             onClick={() =>
-//               navigate(
-//                 "/dashboard/return-requests"
-//               )
-//             }
-//             className="
-//         bg-orange-500
-//         hover:bg-orange-600
-//         text-white
-//         p-5
-//         rounded-2xl
-//         flex
-//         items-center
-//         gap-3
-//         font-semibold
-//       "
-//           >
-//             <FiRotateCcw size={22} />
-//             View Returns
-//           </button>
-
-//         </div>
-
-//       </div>
-
-//     </div>
-
-//   );
-
-// };
-
-// export default Dashboard;
-
-
 import { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -462,7 +119,7 @@ const Dashboard = () => {
       value:
         adminDashboard?.retiredAssets || 0,
 
-      icon: FiArchive ,
+      icon: FiArchive,
 
       bg: "bg-red-100",
 
@@ -550,59 +207,46 @@ const Dashboard = () => {
     <div className="space-y-8">
       <PageHeader
         title="Dashboard"
-        description="Overview of assets, employees, requests and returns"
-      />
+        description="Overview of assets, employees, requests and returns" />
 
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white shadow-lg">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5 text-white shadow-lg">
+
         <h2 className="text-2xl font-bold">
           Asset Management Overview
         </h2>
 
-        <p className="mt-2 text-blue-100 max-w-2xl">
-          Monitor company assets, employee allocations,
-          requests, approvals, and returns from one
-          centralized dashboard.
-        </p>
-      </div>
+        <div className="grid grid-cols-2 gap-12 mt-5">
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Asset Utilization
-          </p>
+          <div>
+            <p className="text-blue-100 text-sm">
+              Asset Utilization
+            </p>
 
-          <h3 className="text-4xl font-bold mt-2">
-            {adminDashboard?.totalAssets
-              ? Math.round(
-                (adminDashboard.assignedAssets /
-                  adminDashboard.totalAssets) *
-                100
-              )
-              : 0}
-            %
-          </h3>
+            <h3 className="text-4xl font-bold leading-none mt-1">
+              {adminDashboard?.totalAssets
+                ? Math.round(
+                  (adminDashboard.assignedAssets /
+                    adminDashboard.totalAssets) *
+                  100
+                )
+                : 0}
+              %
+            </h3>
+          </div>
+
+          <div>
+            <p className="text-blue-100 text-sm">
+              Pending Actions
+            </p>
+
+            <h3 className="text-4xl font-bold leading-none mt-1">
+              {(adminDashboard?.pendingRequests || 0) +
+                (adminDashboard?.pendingReturnRequests || 0)}
+            </h3>
+          </div>
+
         </div>
 
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Pending Actions
-          </p>
-
-          <h3 className="text-4xl font-bold mt-2">
-            {(adminDashboard?.pendingRequests || 0) +
-              (adminDashboard?.pendingReturnRequests || 0)}
-          </h3>
-        </div>
-
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-          <p className="text-sm text-slate-500">
-            Workforce
-          </p>
-
-          <h3 className="text-4xl font-bold mt-2">
-            {adminDashboard?.employees || 0}
-          </h3>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -642,7 +286,7 @@ const Dashboard = () => {
                     Live Data
                   </span>
 
-                  <h2 className="mt-4 text-5xl font-bold tracking-tight text-slate-900">
+                  <h2 className="mt-4 text-4xl font-bold tracking-tight text-slate-900">
                     {card.value}
                   </h2>
                 </div>
