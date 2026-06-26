@@ -20,6 +20,7 @@ import {
     FiEye,
     FiUserPlus,
     FiArchive,
+    FiRefreshCw,
 } from "react-icons/fi";
 
 import {
@@ -339,16 +340,26 @@ const Assets = () => {
                             setStatusFilter(
                                 "all"
                             );
+                            setCurrentPage(1);
                         }}
                         className="
-          px-4
-          py-3
-          rounded-xl
-          border
-          border-slate-300
-        "
+           flex
+           items-center
+           gap-2
+           px-5
+           py-3
+           rounded-xl
+           bg-slate-700
+           hover:bg-slate-800
+           text-white
+           font-medium
+           shadow-sm
+           transition-all
+           duration-200
+           "
                     >
-                        View All
+                      <FiRefreshCw className="text-base"/>
+                        Reset Filters
                     </button>
 
                 </div>
