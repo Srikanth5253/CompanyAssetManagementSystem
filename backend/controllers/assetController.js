@@ -4,7 +4,6 @@ import Asset from "../models/Asset.js";
 import AssetHistory from "../models/AssetHistory.js";
 import Request from "../models/Request.js";
 
-
 export const createAsset =
   asyncHandler(
     async (req, res) => {
