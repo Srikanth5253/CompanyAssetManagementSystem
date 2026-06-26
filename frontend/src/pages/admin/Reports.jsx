@@ -113,7 +113,7 @@ const Reports = () => {
         ) || [];
 
     const REQUEST_COLORS = {
-        approved: "#10B981",
+        completed: "#10B981",
         pending: "#F59E0B",
         rejected: "#EF4444",
     };
@@ -136,10 +136,10 @@ const Reports = () => {
             ? categoryData[0]
             : null;
 
-    const approvedRequests =
+    const completedRequests =
         requestData.find(
             (item) =>
-                item.status?.toLowerCase() === "approved"
+                item.status?.toLowerCase() === "completed"
         )?.count || 0;
 
     const pendingRequests =
@@ -350,7 +350,7 @@ const Reports = () => {
         text-emerald-800
         font-medium
       ">
-                            {approvedRequests} requests approved
+                            {completedRequests} requests completed
                         </p>
                     </div>
 

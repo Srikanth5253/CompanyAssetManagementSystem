@@ -36,6 +36,7 @@ const requestSchema =
         enum: [
           "Pending",
           "Approved",
+          "Completed",
           "Rejected",
         ],
         default: "Pending",

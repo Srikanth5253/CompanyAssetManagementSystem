@@ -150,89 +150,66 @@ export const deleteAsset =
 export const assignAsset =
   asyncHandler(async (req, res) => {
 
-    const { employeeId } =
-      req.body;
+    const { employeeId } = req.body;
 
-    const approvedRequest =
-      await Request.findOne({
-        employee: employeeId,
-        status: "Approved",
-      });
-
-    if (!approvedRequest) {
-      res.status(400);
-
-      throw new Error(
-        "Employee must have an approved request before asset assignment"
-      );
-    }
-    const asset =
-      await Asset.findById(
-        req.params.id
-      );
+    const asset = await Asset.findById(req.params.id);
 
     if (!asset) {
       res.status(404);
+      throw new Error("Asset not found");
+    }
 
+    const approvedRequest = await Request.findOne({
+      employee: employeeId,
+      status: "Approved",
+      assetType: asset.category,
+    });
+
+    if (!approvedRequest) {
+      res.status(400);
       throw new Error(
-        "Asset not found"
+        `Employee does not have an approved ${asset.category} request`
       );
     }
 
-    const employee =
-      await User.findById(
-        employeeId
-      );
+    const employee = await User.findById(employeeId);
 
     if (!employee) {
       res.status(404);
-
-      throw new Error(
-        "Employee not found"
-      );
+      throw new Error("Employee not found");
     }
 
     if (asset.status === "assigned") {
       res.status(400);
-
-      throw new Error(
-        "Asset is already assigned"
-      );
+      throw new Error("Asset is already assigned");
     }
 
-    asset.assignedTo =
-      employeeId;
-
-    asset.assignedDate =
-      new Date();
-
-    asset.returnedDate =
-      null;
-
-    asset.status =
-      "assigned";
+    asset.assignedTo = employeeId;
+    asset.assignedDate = new Date();
+    asset.returnedDate = null;
+    asset.status = "assigned";
 
     await asset.save();
+
+    approvedRequest.status = "Completed";
+    await approvedRequest.save();
+
     await AssetHistory.create({
       asset: asset._id,
       employee: employee._id,
       action: "Assigned",
     });
 
-    const updatedAsset =
-      await Asset.findById(
-        asset._id
-      ).populate(
-        "assignedTo",
-        "employeeId name department"
-      );
+    const updatedAsset = await Asset.findById(asset._id).populate(
+      "assignedTo",
+      "employeeId name department"
+    );
 
     res.status(200).json({
       success: true,
       asset: updatedAsset,
     });
-  }
-  );
+  });
 
 export const getMyAssets =
   asyncHandler(async (req, res) => {
